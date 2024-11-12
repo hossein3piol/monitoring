@@ -1,0 +1,70 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+  external_labels:
+    monitor: 'prom'
+
+rule_files:
+  - '/etc/prometheus/alerts/*.rules'
+
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+            - "alertmanager:9093"
+
+scrape_configs:
+  - job_name: 'node-exporter'
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/node-exporter/targets.json'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+#    basic_auth:
+#      username: "isvip"
+#      password: ${PROMETHEUS_PASSWORD}
+
+  - job_name: 'grafana'
+    scrape_interval: 30s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['grafana:3000']
+
+  - job_name: 'alertmanager'
+    scrape_interval: 30s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['alertmanager:9093']
+
+  # HTTP Monitoring Job
+  - job_name: 'http_check'
+    metrics_path: /probe
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/blackbox/website/targets.json'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115
+
+  # Ping Monitoring Job
+  - job_name: 'ping_check'
+    metrics_path: /probe
+    params:
+      module: [icmp]  # Use the icmp module for ping probes
+    file_sd_configs:
+      - files:
+          - '/etc/prometheus/blackbox/ping/targets.json'
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter:9115

@@ -1,0 +1,39 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'Production_Environment'
+  group_wait: 30s
+  group_interval: 30s
+  repeat_interval: 1y
+  group_by: ['instance', 'severity']
+
+  routes:
+    - match:
+        instance: '54.36.241.180'
+      receiver: 'user1'
+    - match:
+        instance: '85.208.253.227'
+      receiver: 'user2'
+
+receivers:
+  - name: 'Production_Environment'
+    telegram_configs:
+      - bot_token: '7772727037:AAFOoEFn60C50LeocGqTTUE3u6mTRsIOA8I'
+        api_url: "https://api.telegram.org"
+        chat_id: 318798865
+        parse_mode: ""
+        send_resolved: true
+        disable_notifications: false
+
+  - name: 'user1'
+    telegram_configs:
+      - bot_token: '7655300059:AAGixqRWUjTinxZlBknQnGNZeV_4VkVDu-A'
+        chat_id: -1002488315380
+        message: '{{ .CommonAnnotations.summary }}'
+
+  - name: 'user2'
+    telegram_configs:
+      - bot_token: '7246711579:AAE0TzzjCwPjKryJ3zHK_MjQRGAsNs6aOrE'
+        chat_id: -1002395330444
+        message: '{{ .CommonAnnotations.summary }}'

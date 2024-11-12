@@ -1,0 +1,76 @@
+[
+  {
+    "targets": [
+      "8.8.8.8"
+    ],
+    "labels": {
+      "description": "Google"
+    }
+  },
+  {
+    "targets": [
+      "185.4.30.41"
+    ],
+    "labels": {
+      "description": "Mayeli-284971-185.4.30.41",
+      "tag2": "DC-Poonak",
+      "tag8": "VPS OR VM",
+      "tag10": "Linux-OS",
+      "tag13": "IR",
+      "tag14": "Ping"
+    }
+  },
+  {
+    "targets": [
+      "185.4.30.42"
+    ],
+    "labels": {
+      "description": "Mayeli-284971-185.4.30.42",
+      "tag2": "DC-Poonak",
+      "tag8": "VPS OR VM",
+      "tag10": "Linux-OS",
+      "tag13": "IR",
+      "tag14": "Ping"
+    }
+  },
+  {
+    "targets": [
+      "5.5.5.5"
+    ],
+    "labels": {
+      "description": "aaaaaa-55-5.5.5.5",
+      "tag7": "Dedicated"
+    }
+  },
+  {
+    "targets": [
+      "5.2.5.5"
+    ],
+    "labels": {
+      "description": "aaaaaa-55-5.5.5.5",
+      "Tags": "DC-Poonak, VPS OR VM, Linux-OS, Dedicated"
+    }
+  },
+  {
+    "targets": [
+      "54.36.241.180"
+    ],
+    "labels": {
+      "instance": "54.36.241.180",
+      "description": "user1-111-54.36.241.180",
+      "Tags": "user1-test"
+    }
+  },
+  {
+    "targets": [
+      "85.208.253.227"
+    ],
+    "labels": {
+      "instance": "85.208.253.227",
+      "description": "user2-222-85.208.253.227",
+      "Tags": "user2-test"
+    }
+  }
+
+
+]

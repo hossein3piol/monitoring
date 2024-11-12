@@ -1,0 +1,26 @@
+[
+  {
+    "targets": [
+      "https://www.google.com"
+    ],
+    "labels": {
+      "description": "Google"
+    }
+  },
+  {
+    "targets": [
+      "https://food.greenweb.ir"
+    ],
+    "labels": {
+      "description": "food-user1"
+    }
+  },
+  {
+    "targets": [
+      "https://chat.greenweb.ir"
+    ],
+    "labels": {
+      "description": "chat-user2"
+    }
+  }
+]

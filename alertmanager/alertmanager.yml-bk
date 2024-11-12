@@ -1,0 +1,23 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'Production_Environment'
+  group_wait: 30s
+  group_interval: 30s
+  repeat_interval: 1y
+  group_by: ['instance', 'severity']
+
+receivers:
+- name: 'Production_Environment'
+  telegram_configs:
+  - bot_token: '7772727037:AAFOoEFn60C50LeocGqTTUE3u6mTRsIOA8I'
+    api_url: "https://api.telegram.org"
+    chat_id: 318798865
+    parse_mode: ""
+    send_resolved: true
+    disable_notifications: false
+    # http_config:
+    #   proxy_url: '<YOUR HTTP PROXY FOR SENT TELEGRAM MESSAGE>'
+    #   follow_redirects: true
+    #   enable_http2: true

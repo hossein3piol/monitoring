@@ -1,0 +1,101 @@
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.55.0   # Use a stable Prometheus version
+    restart: always
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - ./blackbox:/etc/prometheus/blackbox
+      - prometheus_data:/prometheus   # Persistent data storage
+#    environment:
+#      - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+#      - '--web.config.file=/etc/prometheus/web.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=365d'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - "127.0.0.1:9090:9090"
+    networks:
+      prom_net:
+
+
+  grafana:
+    image: grafana/grafana:11.3.0    # Use a stable Grafana version
+    container_name: grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_PATHS_DATA=/var/lib/grafana
+    volumes:
+      - grafana_data:/var/lib/grafana          # Persistent storage for dashboards and settings
+      - ./grafana/:/etc/grafana/provisioning/
+    ports:
+      - "3000:3000"
+    networks:
+      prom_net:
+
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0  # Use a stable Alertmanager version
+    restart: always
+    container_name: alertmanager
+    volumes:
+      - alertmanager_data:/alertmanager
+      - ./alertmanager:/etc/alertmanager  # Alertmanager config
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+    #ports:
+    #  - "9093:9093"
+    networks:
+      prom_net:
+
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.2  # Use a stable version of Node Exporter
+    restart: always
+    container_name: node-exporter
+    #ports:
+    #  - "9101:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($|/)"'
+    networks:
+      prom_net:
+
+  blackbox-exporter:
+    image: prom/blackbox-exporter:v0.25.0
+    restart: always
+    container_name: blackbox-exporter
+    command:
+      - '--config.file=/etc/blackboxexporter/blackbox-exporter.yml'
+    volumes:
+      - ./blackbox:/etc/blackboxexporter
+    #ports:
+    #  - "9115:9115"  # Expose the Blackbox Exporter port
+    networks:
+      prom_net:
+
+
+
+volumes:
+  prometheus_data:
+  grafana_data:
+  alertmanager_data:
+
+networks:
+  prom_net:
+    external: false
+    name: prom_net

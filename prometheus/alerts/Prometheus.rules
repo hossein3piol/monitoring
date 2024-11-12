@@ -1,0 +1,12 @@
+groups:
+- name: Prometheus_Alerts
+  rules:
+
+  - alert: InstanceDown
+    expr: up == 0
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "🚨 Instance Down Alert (instance {{ $labels.instance }})"
+      description: "⚠️ Instance {{ $labels.instance }} is down and not responding to ping for more than 1 minute."

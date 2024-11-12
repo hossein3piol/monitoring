@@ -1,0 +1,9 @@
+[
+  {
+    "targets": ["node-exporter:9100"],
+    "labels": {
+      "description": "Local-Node-Exporter"
+    }
+  }
+]
+
